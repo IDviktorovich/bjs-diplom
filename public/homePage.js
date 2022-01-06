@@ -89,15 +89,17 @@ ApiConnector.getFavorites(getFavoritesCallback);
 
 favorites.addUserCallback = function (data) {
     const userCallback = (responseBody) => {
-        console.log(responseBody);
+        
         if (responseBody.success) {
             favorites.clearTable();
             favorites.getData(data);
-            
+            favorites.fillTable(responseBody.data);
+            moneyManager.updateUsersList(responseBody.data);
             favorites.setMessage(true, 'Пользователь добавлен');
         } else {
-            favorites.setMessage(false, 'Пользователь не добавлен')
+            favorites.setMessage(false, responseBody.error)
         }
+        console.log(responseBody);
     }
 
     ApiConnector.addUserToFavorites(data, userCallback);
@@ -109,10 +111,11 @@ favorites.removeUserCallback = function (data) {
         if (responseBody.success) {
             favorites.clearTable();
             favorites.getData(data);
-            
-            favorites.setMessage(true, 'Пользователь добавлен');
+            favorites.fillTable(responseBody.data);
+            moneyManager.updateUsersList(responseBody.data);
+            favorites.setMessage(true, 'Пользователь удалён');
         } else {
-            favorites.setMessage(false, 'Пользователь не добавлен')
+            favorites.setMessage(false, responseBody.error)
         }
         
     }
